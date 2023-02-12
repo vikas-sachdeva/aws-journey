@@ -145,6 +145,7 @@ Notes that I am preparing while learning AWS
 ## Glacier
 
  - Pay each time for access.
+ - Objects are stored in Vaults similar to bucket in S3.
  - Used for long time data archiving.
 
 ### Glacier Instant Retrival
@@ -159,3 +160,82 @@ Notes that I am preparing while learning AWS
   - Most cheapest storage class.
   - Use for storing data for 7-10 years.
   - Retrival takes 12 and bulk retrival can take up to 48 hours.
+
+
+## Lifecycle Management
+
+  - Automates moving objects between different tiers, thereby maximizing cost effectiveness.
+  - Can be used along with versioning to move older versions to different tiers.
+
+ ## S3 Object Lock
+
+   - Use s3 Object Lock to store objects versions using a Write once and read many (WORM) model.
+   - Objects versions can be locked for a perdefined period of time called Retention period.
+   - Object lock works only in versioned buckets.
+   - Placing an object lock on an object protects only the version specified in the request. it doesn't prevent new versions of the object from being created.
+   - Object lock can be on individual objects or can be applied on whole bucket.
+   - There are two modes of S3 object lock.
+
+### Governance Mode
+
+   - With governance mode, objects versions can be modified or deleted if the person has some special permissions. Retention settings can also be changed using special permissions.
+
+### Compliance Mode
+   
+   - With Compliance mode, objects versions can not be modified or deleted even by the root user itself. Retention period can't be changed.
+
+### Legal Holds
+
+  - S3 Object Lock which also prevents an object version from being overwritten or deleted.
+  - With legal holds, there is no retention period. So it remains effective until removed.
+  - With legal holds, S3 objects modification or deletion can be prevented even when retention period is expired.
+  - `s3:PutObjectLegalHold` permission is required for adding or removing legal holds.
+
+
+## Glacier Vault Lock
+
+  - Allows to enforce compliance controls for individual S3 Glacier vaults with a vault lock policy.
+  - Controls like WORM can be specified in vault lock policy and lock the policy from future edits. Once locked, the policy can no longer be changed.
+
+
+## Encrypting S3 Objects
+
+### Encryption in Transit
+
+  - Uses SSL/TLS certificate and https
+
+### Encryption at Rest - Server Side Encryption (SSE)
+  
+  - 3 ways to do encryption -
+      - Using SSE-S3 - Uses S3-managed keys, using AES 256-bit encryption. 
+      - Using SSE-KMS - Uses AWS-KMS managed keys.
+      - SSE-C - Uses customer-provided keys.
+
+
+### Encryption at Rest - Client-side encryption
+  - Objects are encrypted by client before uploading them to S3.
+
+
+### Enforce Encryption 
+
+#### Using Console
+
+   - Enable ecryption at AWS console for whole bucket.
+
+#### Using Bucket Policy
+
+   - While uploading a file in S3, request can contain http request header `x-amz-server-side-encryption` with value `AES256` for SSE-S3 or with value `aws:kms` for SSE-KMS. This header indicates that file should be encrypted at upload time using specified SSE keys.
+   - Bucket policy can be created for denying request which does not have this header present to enfore encryption at upload time. 
+
+## S3 Performance Optimization
+
+### S3 Prefixes
+
+   - S3 prefix is just a folder inside a bucket which contains files.
+
+### S3 Performance
+
+   - S3 supports 5500 GET/HEAD request per second per prefix.
+   - SSE-KMS can be a limitation for S3 performance if it is used for encryption.
+   - **Multipart upload** can be used for parallelize uploads. It is recommended for files over 100 MB and requires for files over 5 GB
+   - **S3 Byte-Range Fetches** parallelize downloads by specifying byte ranges.
