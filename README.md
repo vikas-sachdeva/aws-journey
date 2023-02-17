@@ -231,7 +231,7 @@ Notes that I am preparing while learning AWS
 
 ### S3 Prefixes
 
-   - S3 prefix is just a folder inside a bucket which contains files.
+   - S3 prefix is just a folder or subfolder inside a bucket which contains files.
 
 ### S3 Performance
 
@@ -239,3 +239,75 @@ Notes that I am preparing while learning AWS
    - SSE-KMS can be a limitation for S3 performance if it is used for encryption.
    - **Multipart upload** can be used for parallelize uploads. It is recommended for files over 100 MB and requires for files over 5 GB
    - **S3 Byte-Range Fetches** parallelize downloads by specifying byte ranges.
+
+
+## S3 Replication and backup
+
+   - Objects can be replicated from one bucket to another, from one account to another or from one region to another.
+   - Versioning must be enabled for replication in source and destination bucket.
+   - Objects in existing buckets are not replicated automatically. Once replication is on, all subsequent updated objects will be replicate automatically.
+   - Delete markers are not replicated by default but can be turned on.
+
+## S3 Batch Operations
+
+   - S3 batch operations is used to perform operations in all objects or a subset of objects in the bucket.
+   - With batch operation, we can -
+      - Modify object metadata and properties.
+      - Copy objects betweeen buckets.
+      - Invoke AWS lambda functions for each object.
+   - S3 Batch Replication operation provides way to replicate objects that existed before a replication configuration was in place.
+
+
+# Elastic Compute Cloud EC2
+
+## EC2 Pricing Options
+
+### On-Demand
+  
+  - Pay by minute or second depend on the instance type.
+  - No commitment of usage.
+  - No upfront payment.
+
+### Reserved
+   
+   - Reserve instances for 1-3 years. 
+   - Good for predictable usage.
+   - Payment can be done full upfront, partial upfront or none.
+   - Full upfront will be the cheapest option. 
+   - Reserved instances belongs to only one region.
+   - Can be counted against serverless technologies like Lambda and Fargate.
+
+### Standard Reserved Instances
+
+   - Upto 72% discount off the on-demand price.
+
+### Convertible Reserved Instances
+
+   - Up to 54% off the on-demand price.
+   - Has the option to change to a different RI type of equal or greater value.
+
+### Scheduled Reserved Instances
+
+   - Lauch within the time window you define.
+   - Time window is fixed and recurring that only requires a fraction of a day, week or month usage.
+
+### Spot
+
+   - Purchase unused capacity on discount of up to 90%.
+   - Prices fluctuate with supply and demand.
+
+### Dedicated
+
+   - A physical EC2 server dedicated for use.
+   - The most expensive option.
+   - Should be used when you have -
+      - Regulatory requirements that may not support multi-tenant virtualization.
+      - Licensing which are not portable or does not support multi-tenancy or cloud deployments.
+   - Can be puchased on-demand (hourly)
+   - Can be reserved and get upto 70% discount off the on-demand price.
+
+
+## AWS Pricing Calculator - calculator.aws
+
+   - Estimate the cost for moving into cloud.
+   - Estimates can be made including EC2, database etc.
