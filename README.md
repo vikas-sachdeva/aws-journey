@@ -72,6 +72,11 @@ Notes that I am preparing while learning AWS
 ## Roles
 
   - Allow one service of AWS to interact with another service of AWS.
+  - Role is intended to be assumable by anyone who needs it.
+  - Roles are temporary. When you assume a role, it provides you with a temporary security credentials for your role session.
+  - Roles can be assumed by people, AWS architecture or other system-level accounts.
+  - Roles can allow cross-account access. This allows one AWS account the ability to interact with resources in other AWS accounts.
+  - Roles can be attached or detached to running EC2 instances without stopping them.
 
 ## The Principle of Least Privilege
 
@@ -293,8 +298,29 @@ Notes that I am preparing while learning AWS
 
 ### Spot
 
-   - Purchase unused capacity on discount of up to 90%.
+   - Purchase unused capacity on discount of up to 90% of on-demand price.
    - Prices fluctuate with supply and demand.
+   - Good for stateless, fault-tolerant or flexible applications.
+   - If the spot price goes above your maximum purchase price, spot instances either stop or terminate depending on the choice in 2 mins.
+
+#### Spot Block
+
+   - Spot block can be used to stop your Spot instances from being terminated even if the spot price goes above maximum purchase price.
+   - Spot block can be set between 1 to 6 hours.
+
+#### Spot Fleets
+
+   - A collection of Spot instances and optionally on-demand instances.
+   - Spot fleet will try and match the target capacity with your price restraints.
+   - It uses launch pools. Launch pools define things like EC2 instance type, OS, AZ etc.
+   - Multiple pools can be setup and the fleet will choose the best way to implement depending on the strategy defined.
+   - Spot fleet will stop lauching instances once you reach your price threshold or capacity desire.
+   - There are 4 strategies which can be defined -
+      - <b>Capacity Optimized</b> - Spot instances come from the pool with optimal capacity for the number of instances launching. This strategy has the lowest risk of interruption.
+      - <b>Diversified across all pools</b> - Spot instances are distributed across all pools.
+      - <b>Lowest Price</b> - Spot instances come from the pool with the lowest price. This is default strategy. This strategy has the highest risk of interruption.
+      - <b>Price capacity optimized</b> It is recommended strategy. Spot Fleet identifies the pools with the highest capacity availability for the number of instances that are launching. This means that AWS will request Spot Instances from the pools that they believe have the lowest chance of interruption in the near term. Spot Fleet then requests Spot Instances from the lowest priced of these pools. The priceCapacityOptimized allocation strategy is the best choice for most Spot workloads, such as stateless containerized applications, microservices, web applications, data and analytics jobs, and batch processing.
+      - <b>instancesPoolsToUseCount</b> - Spot instances are distributed across the number of spot instance pools you specify. This parameter is valid only when used in combination with lowestPrice. Spot Fleet selects the lowest priced Spot pools and evenly allocates your target Spot capacity across the number of Spot pools that you specify.
 
 ### Dedicated
 
@@ -310,4 +336,125 @@ Notes that I am preparing while learning AWS
 ## AWS Pricing Calculator - calculator.aws
 
    - Estimate the cost for moving into cloud.
-   - Estimates can be made including EC2, database etc.
+   - Estimates can be made including EC2, database etc. 
+
+## Connect to EC2 instances
+
+### EC2 Instance Connect
+   
+   - EC2 instance connect allows for a convenient and secure native SSH connection using short-lived keys.
+   - It requires the host security group to permist ssh traffic inbound.
+   - It supports only Linux EC2 hosts
+
+###  Session Manager
+
+   - Session manager permits SSH connection tunneled over a proxy connection.
+   - Session manager supports Windows and Linux hosts and both EC2 instances and On-prem.
+
+###  SSH Client
+
+   - Connect from your machine using generated keys.
+
+## Security Groups
+
+  - Security groups are virtual firewalls for EC2 instances.
+  - By default, all inbound traffic is blocked and all outbound traffic is allowed.
+  - Changes to security groups take effect immediately.
+
+
+## Bootstrap Scripts
+
+  - A script that runs when the instance first runs.
+  - Writing large script adds to the amount of time it takes to boot the instance.
+  - Useful for automating the installation of applications.
+  - It is also called user data.
+
+## EC2 Metadata
+
+  - Data about EC2 instances like placement groups, local or public IP, security groups etc.
+  - Can be accessed inside EC2 instance by curl.
+  - Use `curl http://169.254.169.254/latest/meta-data/` to retrive all categories of data.
+  - Use `curl http://169.254.169.254/latest/meta-data/<category>` to retrive data of a particular category.
+
+
+## EC2 Networking
+
+  - Multiple network interface can be attached to EC2 instance.
+  - Primany network interface can not be detached from EC instance.
+  - 3 differet types of virtual networking cards can be attached to EC2 instances -
+
+### Elastic Network Interface ENI
+
+  - For basis, day-to-day networking.
+  - Low budget, high availability solution.
+  - Attached by default to EC2 instances.
+  - It allows -
+     - Private IPv4 addresses
+     - Public IPv4 address
+     - Many IPv6 addresses
+     - MAC address
+     - 1 or more security groups.
+  - Use cases -
+     - Create a management network or logging network etc with different IP address and differnet subnets in a single AZ.
+     - Use network and security appliances with mutiple ENI configuration eg load balancer, NAT, proxy.
+     - EC2 instance can have multiple ENIs in different subnets in the same AZ. Such instances are called dual-homed instance. So, ENI can be used to create dual-homed instances with workloads/roles on distinct subnets.
+
+### Enhanced Networking EN
+
+  - Uses <b>Single Root I/O Virtualization (SR-IOV)</b> to provide high performance and lower CPU utilization.
+  - SR-IOV allows VMs to bypass hypervisor and talk to hardware directly.
+
+![SR IOV functions](images/ec2-en-sr-iov.PNG?raw=true "SR IOV functions")
+
+  - High performance networking between 10Gbps - 100 Gbps.
+  - Provides higher bandwidth, higher packet per second (PPS) performance and consistently lower inter-instance latencies.
+
+  - No additional charge.
+  - All current generation instance types support EN except for T2 instances.
+  - Can be enabled using 2 ways -
+
+#### Elastic Network Adaper (ENA)
+
+  - Supports network speeds of up to 100 Gbps for supported instance types.  
+
+#### Intel 82599 Virtual Function (VF) interface
+
+  - Supports network speed of up to 10 Gbps for supported instance types. 
+  - Generally used on older instances.
+
+### Elastic Fabric Adapter EFA
+
+  - Accelerates High Performance Computing (HPC) and machine learning applications.
+  - Providees lower and more consistent latency and higher throughput than the TCP transport traditionally used in cloud-based HPC systems.
+  - EFA is an ENA with an additional <b>OS-BYPASS</b> functionality.
+  - OS-bypass enables HPC and machine learning applications to bypass OS kernal and communicated directly with the EFA device. 
+  - It makes it a lot faster with much lower latency.
+  - It is only supported with Linux, not with Windows.
+
+
+## EC2 Placement Groups
+
+  - Placement groups can'b be merged.
+  - Existing instances can be moved into a placement group but the instance should be in stopped state. Movement can be done through AWS CLI or SDK only.
+
+### Cluster Placement Group
+
+  - Group EC2 instances in a single AZ.
+  - Result in Low network latency and high network throughput.
+  - AWS recommends homogeneous instances within cluster placement group.
+
+### Spread Placement Group
+  
+  - Individual EC2 instances are placed on different hardware.
+  - Good for critical EC2 instances so that hardware failure of one machine does not stop whole system.
+  - Use for individual EC2 instances.
+  - Max 7 instances per group per AZ.
+  - Can span to multiple AZ.
+
+### Partition Placement Group
+
+  - EC2 instances are grouped and placed on different partitions called Racks.
+  - Use for multiple EC2 instances.
+  - Can span to multiple AZ.
+  - Max 7 partitions in partition group.
+  - Amazon EC2 ensures that each partition within a placement group has its own set of racks. Each rack has its own network and power source. No two partitions within a placement group share the same racks, allowing you to isolate the impact of a hardware failure within your application.
