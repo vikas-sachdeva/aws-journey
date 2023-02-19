@@ -312,15 +312,18 @@ Notes that I am preparing while learning AWS
 
    - A collection of Spot instances and optionally on-demand instances.
    - Spot fleet will try and match the target capacity with your price restraints.
-   - It uses launch pools. Launch pools define things like EC2 instance type, OS, AZ etc.
-   - Multiple pools can be setup and the fleet will choose the best way to implement depending on the strategy defined.
-   - Spot fleet will stop lauching instances once you reach your price threshold or capacity desire.
+   - The Spot Fleet selects the Spot capacity pools that meet your needs and launches Spot Instances to meet the target capacity for the fleet. 
+   - A Spot capacity pool is a set of unused EC2 instances with the same instance type (for example, m5.large), operating system, Availability Zone, and network platform. When you make a Spot Fleet request, you can include multiple launch specifications, that vary by instance type, AMI, Availability Zone, or subnet. The Spot Fleet selects the Spot capacity pools that are used to fulfill the request, based on the launch specifications included in your Spot Fleet request, and the configuration of the Spot Fleet request. The Spot Instances come from the selected pools.
+    - The request for Spot Instances is fulfilled if there is available capacity and the maximum price you specified in the request exceeds the current Spot price.
+   - By default, Spot Fleets are set to maintain target capacity by launching replacement instances after Spot Instances in the fleet are terminated. 
+   - You can submit a Spot Fleet as a one-time request, which does not persist after the instances have been terminated. You can include On-Demand Instance requests in a Spot Fleet request.
+   - Your launch configuration determines all the possible Spot capacity pools (instance types and Availability Zones) from which Spot Fleet can launch Spot Instances. However, when launching instances, Spot Fleet uses the allocation strategy that you specify to pick the specific pools from all your possible pools.
    - There are 4 strategies which can be defined -
       - <b>Capacity Optimized</b> - Spot instances come from the pool with optimal capacity for the number of instances launching. This strategy has the lowest risk of interruption.
-      - <b>Diversified across all pools</b> - Spot instances are distributed across all pools.
+      - <b>Diversified</b> - Spot instances are distributed across all pools.
       - <b>Lowest Price</b> - Spot instances come from the pool with the lowest price. This is default strategy. This strategy has the highest risk of interruption.
       - <b>Price capacity optimized</b> It is recommended strategy. Spot Fleet identifies the pools with the highest capacity availability for the number of instances that are launching. This means that AWS will request Spot Instances from the pools that they believe have the lowest chance of interruption in the near term. Spot Fleet then requests Spot Instances from the lowest priced of these pools. The priceCapacityOptimized allocation strategy is the best choice for most Spot workloads, such as stateless containerized applications, microservices, web applications, data and analytics jobs, and batch processing.
-      - <b>instancesPoolsToUseCount</b> - Spot instances are distributed across the number of spot instance pools you specify. This parameter is valid only when used in combination with lowestPrice. Spot Fleet selects the lowest priced Spot pools and evenly allocates your target Spot capacity across the number of Spot pools that you specify.
+      - <b>instancesPoolsToUseCount</b> - The number of spot pools acroos which to allocate your target spot capacity. This parameter is valid only when used in combination with lowestPrice. Spot Fleet selects the lowest priced Spot pools and evenly allocates your target Spot capacity across the number of Spot pools that you specify.
 
 ### Dedicated
 
@@ -365,6 +368,7 @@ Notes that I am preparing while learning AWS
 ## Bootstrap Scripts
 
   - A script that runs when the instance first runs.
+  - It runs at root level.
   - Writing large script adds to the amount of time it takes to boot the instance.
   - Useful for automating the installation of applications.
   - It is also called user data.
@@ -458,3 +462,117 @@ Notes that I am preparing while learning AWS
   - Can span to multiple AZ.
   - Max 7 partitions in partition group.
   - Amazon EC2 ensures that each partition within a placement group has its own set of racks. Each rack has its own network and power source. No two partitions within a placement group share the same racks, allowing you to isolate the impact of a hardware failure within your application.
+
+
+## Deploying vCenter in AWS with VMware Cloud on AWS
+
+  - VCenter can be deployed on AWS using VMWare and it is ordered through VMWare themselves.
+  - VMware is used by organizations around the world for private cloud deployments.
+  - Some organizations opt for a hyrid cloud strategy and wants to connect on-premises cloud to AWS public cloud.
+  - Organizations would be migrating to cloud may also be using VMware's built-in tools.
+  - It can also be used for Disaster Recovery using hybrid cloud model.
+  - vCenter runs on dedicated hardware hosted in AWS using a single AWS account.
+  - Each host is capable for running multiple VMware instances (up to 100)
+  - Cluster can start with 2 hosts up to a maximum of 16 hosts per cluster. These cluster are vCenter cluster.
+
+## AWS Outposts
+
+  - Outposts bring AWS data center directly to you, on-premises. It extends AWS to your data center.
+  - Outposts allow to have large variety of AWS services in your data center.
+  - Allows to create a hybrid cloud.
+  - Fully managed infrastructure You do not need a dedicated team to look after your outposts infrastructure.
+  - Bring the AWS management console, APIs and SDKs into your data center, allowing uniform consistency in your hybrid environment.
+
+## AWS Outposts Family Members
+
+### Outposts Rack
+
+  - Available starting with a single 42U rack and scale up to 96 racks.
+  - Gives the same AWS infrastructure, services and APIs in your own data center.
+  - It is for large deployments.
+
+### Outposts Servers
+
+  - Individual Servers in 1U or 2U form factor.
+  - Useful for small space requirements like retail stores, brnach offices etc.
+  - Provides local compute and networking services.
+  - It is for smaller deployments.
+
+
+# Elastic Block Store EBS
+
+  - Storage volumes you can attach to your EC2 instances.
+  - Designed for mission critical data
+     - Production workloads.
+  - Highly available
+     - Automatically replicated within a single AZ to protect against hardware failures.
+  - Scalable
+     - Dynamically increase capacity and change the volume type with no downtime or performance impact to your live systems.
+
+## EBS Volumns types
+
+### EBS Volumns types - Solid State Disk SSD 
+
+### General Purpose SSD
+
+   - A balance of price and performance.
+
+#### gp2
+
+   - Good for boot volumes or development and test applications that are not latency sensitive.
+
+#### gp3
+
+   - New generation.
+   - Good for applications that require high performance at a low cost like MySQL, Cassandra, virtual desktops and Hadoop analytics.
+   - The top performance of gp3 is 4 times faster than max throughtput of gp2 volumes.
+   - Provides IOPS up to 16000
+
+### Provisioned IOPS (PIOS) SSD
+
+#### io1
+
+   - The high performance option and the most expensive.
+   - Up to 64000 IOPS per volume.
+   - Designed for I/O intensive applications like large databases and latency-sensitive workloads.
+
+#### io2
+
+   - Latest generation
+   - io2 is the same price as io1
+   - Higher durability and more IOPS.
+   - Good for applications that need high level of durability.
+
+
+![EBS SSD Volumes](images/ebs-ssd-volumes.PNG?raw=true "EBS SSD Volumes")
+
+
+### EBS Volumns types - Hard Disk Drive HDD
+
+   - Magnetic drives.
+   - Can not be boot volume.
+
+#### Throughput Optimized HDD (st1)
+
+   - Low-cost HDD volume.
+   - Frenquently accessed, throughput-intensive workloads like Big data, data warehouses, ETL and log processing.
+
+
+#### Cold HDD (sc1)
+
+   - Lowest cost option.
+   - Good choice for colder data requiring fewer scans per day.
+   - Good for applications that need the lowest cost and performance is not a factor like file server.
+    
+
+### IOPS
+
+  - Measures the number of read and write operations per second.
+  - Important metric for quick transactions, low-latency apps, transactional workloads.
+  - The ability to action read and write very quickly.
+
+ ### Throughtput
+
+  - Measures the number of bits read or written per second (MB/s)
+  - Important metric for large datasets, large I/O sizes, complex queries.
+  - The ability to deal with large datasets.
