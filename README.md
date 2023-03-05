@@ -576,3 +576,120 @@ Notes that I am preparing while learning AWS
   - Measures the number of bits read or written per second (MB/s)
   - Important metric for large datasets, large I/O sizes, complex queries.
   - The ability to deal with large datasets.
+
+
+### Volumns
+
+ - Volumes are simply virtual hard disks.
+ - Volumes exist on EBS.
+ - Minimum 1 volume is required per EC2 instance which is called root device volume.
+ - EBS volumes will always be in the same AZ as EC2.
+ - EBS volumes can be resize on the fly without restarting EC2 instance. However, file system need to be extended in the OS so tha OS can see the resized volume.
+ - Volume type can also be changed on the fly.
+
+
+
+### Snapshots
+
+  - Snapshots exist on S3
+  - Point-in-time copy of a volume.
+  - Snapshots are incremental. Only the data that has been changed since your last snapshot are moved to S3.
+  - First snapshot takes longer as it has to create full copy of the volume.
+  - For consistent snapshots, it is recommended to stop the instance and take a snap.
+  - Encrypted EBS volume creates encrypted snapshot automatically.
+  - Snapshots can be shared but only in the region in which they were created. To share to other regions, you will need to copy them to the destination region first.
+
+
+### Copy EC2 instance from one region to another
+
+   - Run EC2 instance in one region.
+   - Create snapshot of attached EBS volume.
+   - Copy snapshot to another region.
+   - Create AMI from the copied snapshot.
+   - Use this AMI for spinning up EC2 instance.
+
+### EBS Encryption
+
+   - EBS encrypts your volume with a data key using AES-256 algorithm.
+   - Amazon EBS encryption uses AWS Key management service (KMS) or customer master keys (CMK) when creating encrypted volumes and snapshots.
+   - Once encryption is enabled -
+      - Data at rest is encrypted inside the volume.
+      - All data in flight moving between the instance and the volume is encrypted.
+      - All snapshots are encrypted.
+      - All volumes created from snapshot are encrypted.
+   - Unencrypted snapshots can be encrypted during copy.
+   - Root device volumes can be encrypted upon creation.
+
+### EC2 hibernation
+
+  - Preserves in-memory RAM on persistent storage (EBS)
+  - Instances can't be hibernated for more than 60 days.
+  - Available for On-demand and Reserved instances.
+
+## Elastic File System EFS
+
+  - Managed Network File System (NFS) that can be mounted on many EC2 instances at the same time.
+  - EFS works with EC2 instances in multiple AZ.
+  - Highly available and scalable but expensive.
+  - Uses NFSv4 protocol.
+  - Compatible with Linux based AMI.
+  - Encryption at rest using KMS
+  - File system scales automatically, no capacity planning required.
+  - Pay per use.
+  - Performance is very good and can be scaled up to petabytes.
+  - Supports one zone only as well as multiple AZs.
+  - Read after write consistency.
+  - When creating EFS file system, performance characteristics can be set -
+      - **General Purpose** - used for things like web servers, CMS etc.
+      - **Max I/O** - used for big data, media processing etc.
+
+
+### EFS Stroage Tiers
+
+  - Comes with 2 different tiers and support lifecycle management.
+
+#### Standard 
+  - For frequently accessed files.
+
+#### Infrequently Accessed
+  - For files not frequently accessed.
+
+
+## FSx for Windows
+
+  - Amazon FSx for Windows File Server provies a fully managed native Microsoft Windows file system.
+  - A managed windows server than runs **Windows Server Message Block (SMB)** - based file services.
+  - Supports AD users, access control lists, groups and security policies along with Distributed File System (DFS) namespaces and replication.
+
+## FSx for Lustre
+
+  - A fully managed file sytem that is optimized for compute-intensive workloads.
+  - Good for anything related to AI and ML like -
+      - High Performance Computing
+      - Machine Learning
+      - Media Data Processing Workflows
+      - Electronic Design Automation
+  - With FSx, Lustre file system can be launched that can process massive datasets at up to hundreds of gigabytes per second of throughout, millions of IOPS and sub-millisecond latencies.
+  - It can store data directly on S3.
+  - Compatible wit all linux.
+
+## Amazon Machine Image AMI
+
+  - All AMIs are categorized as either backed by -
+
+### Amazon EBS
+
+   - Root device for an instance launched from AMI is an Amazon EBS volume created from an Amazon EBS snapshot.
+
+### Instance Store
+
+   - Root device or an instance launched from AMI is an instance store volume created from a template stored in Amazon S3.
+
+
+### Instance Store Volumes
+
+   - Ephemeral storage.
+   - Cannot be stopped.
+   - Reboot of the instance is possible.
+   - Once instance is deleted, instance store volume is lost.
+   - If underlying hardware fails, data is lost.
