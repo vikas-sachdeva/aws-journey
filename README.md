@@ -692,4 +692,15 @@ Notes that I am preparing while learning AWS
    - Cannot be stopped.
    - Reboot of the instance is possible.
    - Once instance is deleted, instance store volume is lost.
+   - Instance backed up instance store can not be stopped.
    - If underlying hardware fails, data is lost.
+
+
+## AWS Backup
+
+   - It allows to consolidate backups across multiple AWS services.
+   - Can be used with AWS orgnanisation which gives centralized control across all AWS services, in multiple AWS accounts across the entire AWS organization.
+   - Automated backup schedules and retention policies can be created. 
+   - Lifecycle policies can also be created which allows to expire unnecessary backups after a perior of time.
+   - It improves compilance. Backup policies can be enforced while backups can be encrypted both at rest and in transit, allowing alignment to regulatory compliance.
+   - Auditing also become easy due to a consolicated view of backups.
