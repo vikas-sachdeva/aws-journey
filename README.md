@@ -100,7 +100,7 @@ Notes that I am preparing while learning AWS
   - Strong Read-After-Write consistency.
   - Successful file upload through API gives 200 status code.
   - Buckets are private by default.
-  - Making bucket content public requies 2 things -
+  - Making bucket content public requires 2 things -
     - Disable Block Public Access.
     - Enable ACL and make public ACL on particular files or add a policy on the bucket which ALLOW read access on all the files in the bucket.
 
@@ -113,14 +113,12 @@ Notes that I am preparing while learning AWS
 
 ## Versioning Objects in S3
 
-  - All versions are stories in S3 even if you delete an object also.
+  - All versions are stored in S3 even if you delete an object also.
   - Once enabled, versionining can not be disabled - only suspended.
-  - Supports MFA
+  - Supports MFA for deletion.
   - Even though bucket is public but old versions of the files will not become public. They have to made public explicitely.
-  - Particular version can be deleted permanently.  
-  - When any file is delete, it is not deleted parmanently. A delete marker is added only which can be deleted further to restore the file.
-
-
+  - Particular version can be deleted permanently.
+  - When any object is deleted, it is not deleted parmanently. A delete marker is added only, which can be deleted further to restore the file.
 
 ## S3 Storage Classes
 
@@ -141,11 +139,13 @@ Notes that I am preparing while learning AWS
 
  - Like S3 Standard-IA but data is stored redundantly within a single AZ.
  - Good for non-critical data.
+ - Per GB retrival fee apply.
+ - low per GB stroage price.
 
 ### S3 Intelligent-Tiering
 
  - Automatically moves data to the most cost-effective tier based on access frequency.
- - Use AI to determine this.
+ - Use AI to determine the access patterns.
 
 ## Glacier
 
@@ -154,6 +154,8 @@ Notes that I am preparing while learning AWS
  - Used for long time data archiving.
 
 ### Glacier Instant Retrival
+
+- Instant retrival time.
 
 ### Glacier Flexible Retrival
 
