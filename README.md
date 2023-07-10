@@ -73,7 +73,7 @@ Notes that I am preparing while learning AWS
 
   - Allow one service of AWS to interact with another service of AWS.
   - Role is intended to be assumable by anyone who needs it.
-  - Assuming role is temporary. When you assume a role, it provides you with a temporary security credentials for your role session.
+  - Roles are temporary. A role does not have standard long-term credentials the same way password or access keys do. When you assume a role, it provides you with a temporary security credentials for your role session.
   - Roles can be assumed by people, AWS architecture or other system-level accounts.
   - Roles can allow cross-account access. This allows one AWS account the ability to interact with resources in other AWS accounts.
   - Roles can be attached or detached to running EC2 instances without stopping them.
