@@ -639,22 +639,60 @@ Notes that I am preparing while learning AWS
   - File system scales automatically, no capacity planning required.
   - Pay per use.
   - Performance is very good and can be scaled up to petabytes.
-  - Supports one zone only as well as multiple AZs.
   - Read after write consistency.
-  - When creating EFS file system, performance characteristics can be set -
-      - **General Purpose** - used for things like web servers, CMS etc.
-      - **Max I/O** - used for big data, media processing etc.
 
+### EFS Performance Mode
+
+  - When creating EFS file system, performance characteristics can be set based on IOPS required.
+
+#### General Purpose
+  
+  - Ideal for a variety of diverse workloads, including high performance and latency-sensitive applications.
+  - Used for things like web servers, CMS etc.
+
+#### Max I/O
+  - Designed for highly parallelized workloads that can tolerate higher latencies.
+  - Used for big data, media processing etc.
+
+### EFS Stroage Class
+
+#### Standard
+  - Stores data redundantly across multiple AZs
+
+#### One Zone
+  - Stroes data redundantly across single AZ
 
 ### EFS Stroage Tiers
 
-  - Comes with 2 different tiers and support lifecycle management.
+  - Eeach EFS storage class comes with 2 different tiers and support lifecycle management.
 
-#### Standard 
+#### Standard
   - For frequently accessed files.
 
-#### Infrequently Accessed
+#### Standard-Infrequent Access
   - For files not frequently accessed.
+
+#### One Zone
+  - For frequently accessed files.
+
+#### One Zone-Infrequent Access
+  - For files not frequently accessed.
+
+
+### Throughput mode
+  - Choose a method for your file system's throughput limits.
+
+#### Enhanced
+  - Provides more flexibility and higher throughput levels for workloads with a range of performance requirements.
+
+##### Elastic
+  - Use this mode for workloads with unpredictable I/O. With Elastic mode, your throughput scales automatically and you only pay for what you use.
+ 
+##### Provisioned
+  - Use this mode if you can estimate your workload's throughput requirements. With Provisioned mode, you configure your file system's throughput and pay for throughput provisioned.
+
+#### Bursting
+  - Provides throughput that scales with the amount of storage for workloads with basic performance requirements.
 
 
 ## FSx for Windows
