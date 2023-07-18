@@ -338,6 +338,23 @@ Notes that I am preparing while learning AWS
    - Can be reserved and get upto 70% discount off the on-demand price.
 
 
+## Burstable performance instances
+
+  - Traditional Amazon EC2 instance types provide fixed CPU resources, while burstable performance instances provide a baseline level of CPU utilization with the ability to burst CPU utilization above the baseline level. 
+  - This ensures that you pay only for baseline CPU plus any additional burst CPU usage resulting in lower compute costs. 
+  - The baseline utilization and ability to burst are governed by CPU credits. Burstable performance instances are the only instance types that use credits for CPU usage.
+  - Each burstable performance instance continuously earns credits when it stays below the CPU baseline, and continuously spends credits when it bursts above the baseline. The amount of credits earned or spent depends on the CPU utilization of the instance -
+     - If the CPU utilization is below baseline, then credits earned are greater than credits spent.
+     - If the CPU utilization is equal to baseline, then credits earned are equal to credits spent.
+     - If the CPU utilization is higher than baseline, then credits spent are higher than credits earned.
+
+  - When the credits earned are greater than credits spent, then the difference is called accrued credits, which can be used later to burst above baseline CPU utilization.
+  - Similarly, when the credits spent are more than credits earned, then the instance behavior depends on the credit configuration mode — Standard mode or Unlimited mode.
+
+  - In **Standard mode**, when credits spent are more than credits earned, the instance uses the accrued credits to burst above baseline CPU utilization. If there are no accrued credits remaining, then the instance gradually comes down to baseline CPU utilization and cannot burst above baseline until it accrues more credits.
+  - In **Unlimited mode**, if the instance bursts above baseline CPU utilization, then the instance first uses the accrued credits to burst. If there are no accrued credits remaining, then the instance spends surplus credits to burst. When its CPU utilization falls below the baseline, it uses the CPU credits that it earns to pay down the surplus credits that it spent earlier. The ability to earn CPU credits to pay down surplus credits enables Amazon EC2 to average the CPU utilization of an instance over a 24-hour period. If the average CPU usage over a 24-hour period exceeds the baseline, the instance is billed for the additional usage at a flat additional rate per vCPU-hour.
+
+
 ## AWS Pricing Calculator - calculator.aws
 
    - Estimate the cost for moving into cloud.
@@ -640,6 +657,13 @@ Notes that I am preparing while learning AWS
   - Pay per use.
   - Performance is very good and can be scaled up to petabytes.
   - Read after write consistency.
+  - An EFS file system can be accessed via -
+      - Within the same VPC
+      - AWS Direct Connect - EFS can be attached to servers running on-premises (on-prem servers)
+      - Intra-region VPC peering - Connect to EC2 instances in different AZs
+      - Inter-region VPC peering - Connect to EC2 instances in other regions
+      - AWS Transit Gateway - Connect to EC2 instances in a different VPC
+      - Across accounts via Shared VPC: Connect to EC2 instances across different accounts
 
 ### EFS Performance Mode
 
@@ -680,19 +704,24 @@ Notes that I am preparing while learning AWS
 
 
 ### Throughput mode
-  - Choose a method for your file system's throughput limits.
+  - EFS also provides two throughput modes -
+
+#### Bursting
+  - This is the default throughput mode where throughput for file operations scale with the amount of data stored in the file system. EFS provides a baseline rate of 50 KB/s per GB. EFS also provides burst credits that can be used to get a higher throughput for a limited time. 
+  - It should be used with workloads with varying throughput.
+  - In this mode, Burst credits accrue when the file system consumes below its base throughput rate, and are deducted when throughput exceeds the base rate.
+
 
 #### Enhanced
-  - Provides more flexibility and higher throughput levels for workloads with a range of performance requirements.
+  - Provides more flexibility and higher throughput levels for workloads -
 
 ##### Elastic
   - Use this mode for workloads with unpredictable I/O. With Elastic mode, your throughput scales automatically and you only pay for what you use.
  
 ##### Provisioned
-  - Use this mode if you can estimate your workload's throughput requirements. With Provisioned mode, you configure your file system's throughput and pay for throughput provisioned.
+  - This mode allows you to provision throughput for the file system regardless of the size of the file system. In this case, Amazon charges you for both the storage and the throughput provisioned.
+  - It should be used with workloads that need consistently high throughtput.
 
-#### Bursting
-  - Provides throughput that scales with the amount of storage for workloads with basic performance requirements.
 
 
 ## FSx for Windows
