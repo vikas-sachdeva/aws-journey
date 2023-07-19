@@ -354,6 +354,8 @@ Notes that I am preparing while learning AWS
   - In **Standard mode**, when credits spent are more than credits earned, the instance uses the accrued credits to burst above baseline CPU utilization. If there are no accrued credits remaining, then the instance gradually comes down to baseline CPU utilization and cannot burst above baseline until it accrues more credits.
   - In **Unlimited mode**, if the instance bursts above baseline CPU utilization, then the instance first uses the accrued credits to burst. If there are no accrued credits remaining, then the instance spends surplus credits to burst. When its CPU utilization falls below the baseline, it uses the CPU credits that it earns to pay down the surplus credits that it spent earlier. The ability to earn CPU credits to pay down surplus credits enables Amazon EC2 to average the CPU utilization of an instance over a 24-hour period. If the average CPU usage over a 24-hour period exceeds the baseline, the instance is billed for the additional usage at a flat additional rate per vCPU-hour.
 
+  - The T instance family provides a baseline CPU performance with the ability to burst above the baseline at any time for as long as required. The baseline CPU is defined to meet the needs of the majority of general purpose workloads, including large-scale micro-services, web servers, small and medium databases, data logging, code repositories, virtual desktops, development and test environments, and business-critical applications. The T instances offer a balance of compute, memory, and network resources, and provide you with the most cost-effective way to run a broad spectrum of general purpose applications that have a low-to-moderate CPU usage. They can save you up to 15% in costs when compared to M instances, and can lead to even more cost savings with smaller, more economical instance sizes, offering as low as 2 vCPUs and 0.5 GiB of memory. The smaller T instance sizes, such as nano, micro, small, and medium, are well suited for workloads that need a small amount of memory and do not expect high CPU usage.
+
 
 ## AWS Pricing Calculator - calculator.aws
 
@@ -405,6 +407,23 @@ Notes that I am preparing while learning AWS
   - Multiple network interface can be attached to EC2 instance.
   - Primany network interface can not be detached from EC instance.
   - 3 differet types of virtual networking cards can be attached to EC2 instances -
+
+## EC2 Instance Types
+  - Following are the five different families of instance types:
+      - General Purpose
+      - Compute-Optimized
+      - Memory-Optimized
+      - Storage-Optimized.
+      - Accelerated Computing
+
+![Different-AWS-EC2-Instance-Types](images/Different-AWS-EC2-Instance-Types.jpg?raw=true "Different-AWS-EC2-Instance-Types")
+
+
+### 
+
+- https://aws.amazon.com/ec2/instance-types/
+- https://www.nops.io/blog/aws-ec2-instance-types/
+
 
 ### Elastic Network Interface ENI
 
@@ -707,7 +726,7 @@ Notes that I am preparing while learning AWS
   - EFS also provides two throughput modes -
 
 #### Bursting
-  - This is the default throughput mode where throughput for file operations scale with the amount of data stored in the file system. EFS provides a baseline rate of 50 KB/s per GB. EFS also provides burst credits that can be used to get a higher throughput for a limited time. 
+  - This is the default throughput mode where throughput for file operations scale with the amount of data stored in the file system. EFS provides a baseline rate of 50 KB/s per GB. EFS also provides burst credits that can be used to get a higher throughput for a limited time.
   - It should be used with workloads with varying throughput.
   - In this mode, Burst credits accrue when the file system consumes below its base throughput rate, and are deducted when throughput exceeds the base rate.
 
@@ -719,7 +738,7 @@ Notes that I am preparing while learning AWS
   - Use this mode for workloads with unpredictable I/O. With Elastic mode, your throughput scales automatically and you only pay for what you use.
  
 ##### Provisioned
-  - This mode allows you to provision throughput for the file system regardless of the size of the file system. In this case, Amazon charges you for both the storage and the throughput provisioned.
+  - This mode allows you to provision throughput for the file system regardless of the size of the file system. In this case, Amazon charges for both the storage and the throughput provisioned.
   - It should be used with workloads that need consistently high throughtput.
 
 
@@ -740,7 +759,7 @@ Notes that I am preparing while learning AWS
       - Electronic Design Automation
   - With FSx, Lustre file system can be launched that can process massive datasets at up to hundreds of gigabytes per second of throughout, millions of IOPS and sub-millisecond latencies.
   - It can store data directly on S3.
-  - Compatible wit all linux.
+  - Compatible with all linux.
 
 ## Amazon Machine Image AMI
 
