@@ -669,7 +669,7 @@ Notes that I am preparing while learning AWS
   - Managed Network File System (NFS) that can be mounted on many EC2 instances at the same time.
   - EFS works with EC2 instances in multiple AZ.
   - Highly available and scalable but expensive.
-  - Uses NFSv4 protocol.
+  - A managed NAS (Network Attached Storage) filer for EC2 instances based on Network File System (NFS) version 4.
   - Compatible with Linux based AMI.
   - Encryption at rest using KMS
   - File system scales automatically, no capacity planning required.
@@ -763,6 +763,7 @@ Notes that I am preparing while learning AWS
 
 ## Amazon Machine Image AMI
 
+  - AMI is just a blueprint for an EC2 instance.
   - All AMIs are categorized as either backed by -
 
 ### Amazon EBS
@@ -780,7 +781,7 @@ Notes that I am preparing while learning AWS
    - Cannot be stopped.
    - Reboot of the instance is possible.
    - Once instance is deleted, instance store volume is lost.
-   - Instance backed up instance store can not be stopped.
+   - Instance backed up by instance store can not be stopped.
    - If underlying hardware fails, data is lost.
 
 
@@ -792,3 +793,14 @@ Notes that I am preparing while learning AWS
    - Lifecycle policies can also be created which allows to expire unnecessary backups after a perior of time.
    - It improves compilance. Backup policies can be enforced while backups can be encrypted both at rest and in transit, allowing alignment to regulatory compliance.
    - Auditing also become easy due to a consolicated view of backups.
+
+
+# Relational Databases
+
+ - Databases available in AWS by RDS service
+    - SQL Server
+    - Oracle
+    - PostgreSQL
+    - MySQL
+    - MariaDB
+    - Amazon Aurora
