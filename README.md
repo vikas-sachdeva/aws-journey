@@ -797,10 +797,124 @@ Notes that I am preparing while learning AWS
 
 # Relational Databases
 
- - Databases available in AWS by RDS service
+  - Databases engines available in AWS by RDS service -
     - SQL Server
     - Oracle
     - PostgreSQL
     - MySQL
     - MariaDB
     - Amazon Aurora
+  - RDS databases run in multiple AZ in which primary database is running in one AZ and secondary database in another AZ in standby mode.
+    - AWS handles replication to another AZ.
+  - Aurora database is always configured in multiple AZ. Rest database can be run in single AZ.
+  - It provides automated failover capability. So, if database in one of the AZ is lost, RDS will automatically fail over to another AZ.
+  - Automated backups.
+  - RDS is generally used for OLTP databases.
+
+## Increase performance using read replica
+
+  - Replica is read-only copy of primary database.
+  - Read replica can be in the same AZ as of primary or it can be in different AZ.
+  - Read replica can also be cross-region.
+  - The main purpose of read replicas is scalability, whereas the main purpose for multi-AZ deployment is availability.
+  - Read replica is mainly used for increasing performance whereas multi-AZ deployment is used for disaster recovery.
+  - However, read replica can be used for disaster recovery of the source DB instance either in the same AWS region or in another region.
+  - Each read replica has its own DNS endpoint.
+  - Read replicas can be promoted to be their own databases. This will break the replication.
+  - Automatic backups must be enabled in order to deploy a read replica.
+  - Multiple read replicas are supported. Except Aurora, each database engine can have up to 5 read replicas.
+  - Read replicas can also have Multi-AZ deployment.
+
+## Aurora
+  
+  - Amazon Aurora is a MySQL and PostgreSQL-compatible relational database engine that combines the speed and availability of high-end commercial databases with the simplicity and cost-effectiveness of open-source databases.
+  - Postgres and MySQL are both supported as Aurora DB (that means your drivers will work as if Aurora was a Postgres or MySQL database.)
+  - It is a proprietary technology from AWS. It is not open-sourced.
+  - Aurora provides up to 5 times better performance than MySQL on RDS and 3 times better than PostgreSQL databases on RDS at a much lower price point, while delivering similar performance and availability.
+  - It provides storage auto scaling. It start with 10 GB and scales in 10-GB increments to 128 TB.
+  - 2 copies of data are contained in each AZ, with a minimum of 3 AZ. 
+  - Aurora is designed to transarently handle the loss of up to 2 copies of data without affecting database write availability and up to 3 copies without affecting read availability.
+  - Aurora storage is also self-healing. Data blocks and disks are continuously scanned for errors and repaired automatically with peer-to-peer replication.
+  - Failover in Aurora is instantaneous in less than 30 seconds. Its HA native.
+  - Aurora costs more than RDS (20% more) - but is more efficient.
+  - Storge is striped across 100s of volumes.
+
+### Aurora Replicas
+  
+  - There are 3 different types of Aurora replicas -
+    - Aurora Replicas
+      - 15 read replicas.
+    - MySQL Replicas
+      - 5 read replicas.
+    - PostgreSQL Replicas
+      - 5 read replicas.
+    - Automated failover is only available with Aurora replicas.
+    - Replication process with aurora replicas is much faster.
+    - Auto scaling can be configured with read replicas.
+    - There is only one reader endpoint for all read replicas. Client will use this reader endpoint and this reader endpoint does connectin load balancing among all available read replicas. It does load balancing at connection level, not at statement level.
+    - Data can be restored at any point of time using backtrack.
+
+### Aurora Backups
+   - Automated backups are always enabled.
+   - Backups do not impact database performance.
+   - Snapshots can also be taken which will again have no impact on performance.
+   - Snapshots can be shared with other AWS accounts.
+
+## Amazon Auora Serverless
+    - An on-demand, auto-scaling configuration for the MySQL-compatible and PostgreSQL-compatible editions of Amazon Aurora.
+    - An Aurora Serverless DB cluster automatically starts up, shuts down, and scales capacity up or down based on your application's needs.
+    - Aurora serverless provides a relatively simple, cost-effective option for infrequent, intermittent, or unpredictable workloads.
+
+
+# DynamoDB
+
+- Amazon DynamoDB is a fast and flexible NoSQL database service for all applications that need consistent, single-digit millisecond latency at any scale.
+- It is fully managed database and supports both document and key-value data models.
+- Its flexible data model and reliable performance make it a great fit for mobile, web, gaming ad-tech, IoT, and many other applications.
+- Data is stored on SSD storage.
+- It is spread across 3 geographically distinct data centers.
+- Eventually consistent reads is provided by default.
+- One can opt for strong consistent reads also.
+- Pay-per-request pricing.
+- No minimum capacity required.
+- No charge for read/write. Only storage and backups are charged.
+- Pay more per request than with provisioned capacity.
+
+## DynamoDB Accelerator (DAX)
+
+ - Fully managed, highly available, in-memory cache of DynamoDB.
+ - It improves performane by 10x.
+ - Request time is reduced from milliseconds to microseconds even under load.
+ - There is no need for developers to manage caching logic.
+ - Compatible with DynamoDB API calls.
+
+## Security
+  - One can connect to DynamoDB using Site-to-site VPN, Direct Connect (DX) and VPC endpoints etc.
+
+## DynamoDB Transactions
+
+- DynamoDB transactions provide developers atomicity, consistency, isolation and durability (ACID) across 1 or more tables within a single AWS accunt and region.
+- There are 3 options available for reads -
+   - Eventual consistency.
+   - Strong consistency.
+   - Transactional consistency.
+- There are 2 options for writes -
+   - Standard
+   - Transactional
+
+## DynamoDB Backups
+- Full backups at any time.
+- Zero impact on table performance or availability.
+- Consistent within seconds and retained until deleted.
+- Operates within same region as the source table.
+
+### Point-in-Time Recovery (PITR)
+
+- Protects agian accidental writes or deletes.
+- Restore to any point in the last 35 days.
+- Incremental backups
+- Not enabled by default.
+- Latest restorable - 5 mins in the past.
+
+
+## DynamoDB Streams 
