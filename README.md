@@ -415,15 +415,38 @@ Notes that I am preparing while learning AWS
       - Memory-Optimized
       - Storage-Optimized.
       - Accelerated Computing
+      - HPC Optimized.
 
 ![Different-AWS-EC2-Instance-Types](images/Different-AWS-EC2-Instance-Types.jpg?raw=true "Different-AWS-EC2-Instance-Types")
 
+### General Purpose Instances: M and T families -
+ - General purpose instances provide a balance of compute, memory and networking resources, and can be used for a variety of diverse workloads. 
+ - These instances are ideal for applications that use these resources in equal proportions such as web servers and code repositories. 
+ - In this family, there are two types of instances:
+     - Fixed performance (M6i, M7a, and M7g family )
+     - Burstable performance (T3a and T4g Family)
+ - M6 instances are the most recent generation of GP instances. These offer a good balance of computing, and memory, network resources and are an excellent choice for applications with high demand for applications and microservices.
 
-### 
 
-- https://aws.amazon.com/ec2/instance-types/
-- https://www.nops.io/blog/aws-ec2-instance-types/
+### Compute Optimized: C-type family -
+  - Compute Optimized instances are ideal for compute bound applications that benefit from high performance processors. 
+  -  Instances belonging to this category are well suited for batch processing workloads, media transcoding, high performance web servers, high performance computing (HPC), scientific modeling, dedicated gaming servers and ad server engines, machine learning inference and other compute intensive applications.
 
+### Memory Optimized: R, X, High Memory, and Z families -
+  - Memory optimized instances are designed to deliver fast performance for workloads that process large data sets in memory.
+  - These circumstances are ideal for running Relational (MySQL) and NoSQL (MongoDB, Cassandra) databases with high performance, in-memory caches.
+
+### Storage Optimized: I, D and H families -
+   - Storage optimized instances are designed for workloads that require high, sequential read and write access to very large data sets on local storage. They are optimized to deliver tens of thousands of low-latency, random I/O operations per second (IOPS) to applications.
+   - 3/I3en instances include large SSDs for random I/Os required by databases, data warehouses, and distributed systems like Hadoop. They are appropriate for NoSQL databases such as HBase, Cassandra, MongoDB, and OLTP. The D2 instance family is optimized for HDD storage, for high disk throughput.
+
+### Accelerated Computing: P, DL, Trn, G, F, VT and Inf families -
+  - Accelerated computing instances use hardware accelerators, or co-processors, to perform functions, such as floating point number calculations, graphics processing, or data pattern matching, more efficiently than is possible in software running on CPUs.
+  - These instances are ideal for Hardware accelerators like Graphics Processing Units (GPU), Graphics-intensive applications like game streaming and rendering.
+
+### HPC Optimized: Hpc families -
+   - High performance computing (HPC) instances are purpose built to offer the best price performance for running HPC workloads at scale on AWS. 
+   - HPC instances are ideal for applications that benefit from high-performance processors such as large, complex simulations and deep learning workloads.
 
 ### Elastic Network Interface ENI
 
@@ -918,3 +941,7 @@ Notes that I am preparing while learning AWS
 
 
 ## DynamoDB Streams 
+
+
+# To Explore
+ - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html 
