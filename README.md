@@ -940,7 +940,57 @@ Notes that I am preparing while learning AWS
 - Latest restorable - 5 mins in the past.
 
 
-## DynamoDB Streams 
+## DynamoDB Streams
+- Time ordered sequence of item-level changes in  table
+- These changes are stored in streams for 24 hours.
+- Sequences are broken up into shards. Shard is just a bunch of data that has sequential sequence numbers.
+- Inserts, updates and deletes changes are published to streams.
+- Can be combined with lambda functions for functionality like stored procedures.
+
+
+![DynamboDB Streams](images/dynamodb_streams.png)
+
+## Global Tables
+
+ - Managed Multi-master and multi-region replication.
+ - Based on dynamoDB streams.
+ - No application changes required.
+ - Replication latency under 1 second.
+
+
+# Document DB
+
+ - Allows to run MongoDB on AWS
+ - Fully managed service.
+
+# Amazon Keyspaces
+
+ - Amazon' Apache Cassandra database service.
+ - fully managed service.
+
+# Amazon Neptune
+
+ - Amazon graph database service.
+ - Fully managed service.
+
+# Amazon Quantum Ledger Database (QLDB)
+
+- Ledger database is a NoSQL database that is immutable, transparent and has a cryptographically verifiable transaction log that is owned by one authority.
+- A record can not be updated in a ledger database. Instead, an update adds a new record to the database.
+- It is used for cryptocurrencies such as Bitcoin, Etherum etc.
+- QLDB is a fully managed ledger database.
+
+# Amazon Timestream
+
+ - A serverless, fully managed database service for time-series data.
+
+
+# VPC
+ - Every AWS account in every region has a default VPC.
+ - Logically isolated part of AWS cloud where you can define your own network.
+
+
+
 
 
 # To Explore
