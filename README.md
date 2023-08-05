@@ -987,10 +987,101 @@ Notes that I am preparing while learning AWS
 
 # VPC
  - Every AWS account in every region has a default VPC.
+ - All subnets in default VPC have a route out to the internet.
+ - Each EC2 instance in default VPC has public as well as private IP address.
+ - However, custom VPC does not have public IP address enabled by default.
  - Logically isolated part of AWS cloud where you can define your own network.
+ - When a VPC is created, it also creates a route table, network ACL, security group and a router.
+ - Internet gateway is attachd to VPC to enable internet access of the EC2 instance.
+ - There can be only one internet gateway per VPC.
+ - Virtual Private gateway can be attached to VPC to establish a VPN connection from corporate data center.
+
+ - There are 2 values for Tenancy -
+     - Default - 
+     - Dedicated - it costs a lot.
+
+## CIDR
+  - Smallest network size AWS supports is 10.0.0.0/28 which will give 16 IP addresses.
+  - If IPAM (IP address manager) pool is available, we can get CIDR ranage from the IPAM pool.
+  - CIDR block size must have a size between /16 and /28
+  - The first 4 IP addresses and the last IP address in each subnet CIDR block are not available for use.
+  - For example, in a subnet with CIDR block 10.0.0.0/24, following 5 IP addresses are reserved -
+      - 10.0.0.0 - network address
+      - 10.0.0.1 - reserved by AWS for VPC router.
+      - 10.0.0.2 - reserved by AWS for DNS server.
+      - 10.0.0.3 - reserved for future use.
+      - 10.0.0.255 - Network broadcast address. AWS does not support broadcast in a VPC, therefore it is reserved.
+
+## subnet
+
+  - subnet is basically a virtual firewall.
+  - 1 subnet will always be in 1 AZ.
+  - There are 2 kinds of subnet -
+     - public which are accessible from  internet
+     - private which are not accessible from internet.
+  - If any subnet is not associated with any route table explicitely, it gets associated implicitly with main route table.
+     - So, if main route table has route to the internet gateway, then all implicit subnets become public.
+  
+
+## Hardware Virtual Private Network (VPN)
+
+ - Hardware Virtual Private Network connection can be created between corporate data center and VPC which will allow to use AWS as an extension of corporate data center.
+
+## NAT Gateway
+
+  - Network Address Translation (NAT) gateway enables instances in private subnet to connect to internet and other AWS services while preventing the internet from initiating a connection with those instances.
+  - NAT gateway is collection of EC2 instances in a AZ and it is managed by AWS behind the scene. NAT gateway is redundant inside AZ.
+  - NAT gateway is not associated with any security group.
+  - NAT gateway is automatically assigned a public IP v4 address.
+  - NAT gateway is created in a subnet.
+  - NAT gateway is placed in public subnet. Instances of private subnet connect to NAT gateway for accessing internet.
+  - For accessing internet from private subnet, route is added to NAT gateway in the route table.
+
+## Security Groups
+
+ - While connecting from outside, first route table comes into picture and then network ACLs comes and lastly security group.
+ - Security groups are stateful - if you send a request from the instance, the response traffic for that request is allowed to flow in regardless of inbound security group rules.
+ - Similarly, responses to allowed inbound traffic are allowed to flow out, regardless of outbound rules.
+
+## Network ACLs
+- A network ACL is an optional layer of security for VPC that acts as a firewall for controlling traffic in and out of one or more subnets.
+- Network ACL is first line of defense.
+- VPC automatically comes with default network ACLs which allows all inbound and outbound traffic.
+- Custom network ACLs can also be created. Custom network ACLs by default deny all inbound and outbound traffic.
+- Each subnet in VPC must be associated with a network ACL. If there is no explicit assoication between a subnet and network ACL, the subnet is automatically associated with default network ACL.
+ - ACL is used to block specific IP addresses. Security groups can not be used for blocking IP addresses.
+ - Each network ACL can be assoicated with multiple subnets but a subnet can be assoicated with only 1 network ACL at a time.
+ - Network ACLs contain a numbered list of rules that are evaluated in order, starting with the lowest numbered rule.
+ - Network ACLs have separate inbound and outbound rules and each rule can either allow or deny  traffic.
+ - Network ACLs are stateless i.e. responses to allowed inbound traffic are subject to the rules of outbound traffic and vice versa. That is why, ephemeral ports are added in network ACL allow list for enabling responses to be sent back to client.
 
 
+## VPC endpoints
+  - A VPC endpoint enables you to privately connect your VPC to supported AWS services and VPC endpoint services which are powered by PrivateLink without requiring an internet gateway, NAT device, VPN connection or AWS Direct Connect connection.
+  - Intances in VPC do not require public IP addresses to communicate with resources in the service.
+  - Traffic between VPC and other services does not leave Amazon network.
+  - Endpoints are virtual devices.
+  - They are horizontally scaled, redundant and highly available VPC components that allow communication between instances in your VPC and services without imposing availability risks or bandwidth constraints on your network traffic.
+  - There are 3 types of endpoints
+     - Interface endpoints - An interface endpoint is an elastic network interface (ENI) with a private IP address that serves as an entry point for traffic headed to a supported service. They support a large number of AWS services. These are powered by AWS PrivateLink. Interface endpoints are generally accessed using the public or private DNS name associated with the service.
+     - Gateway Load Balancer endpoints - Gateway load balancer endpoints are also pwoered by AWS PrivateLink and uses ENI as an entry point for traffic destined to the service. However, gateway load balancer endpoints serve as a target for a route in your route table for traffic destined for the service.
+     - Gateway endpoints - Similar to NAT gateways, a gateway endpoint is a virtual device you provision. It supports connection to S3 and dynamoDB. Gateway endpoints serve as a target for a route in your route table for traffic destined for the service.
 
+
+## VPC Peering
+
+   - VPC peering allows to connect 1 VPC with another via a direct network route using private IP addresses.
+   - Instances behave as they were in the same private network.
+   - You can peer VPCs with other AWS accounts as well as with other VPCs in the same account.
+   - Peering is in star configuration e.g. 1 central VPC peers with 4 others.
+   - No transitive peering.
+   - You can peer between regions.
+   - VPCs to be peered can not have overlapping CIDR ranges.
+
+
+## AWS PrivateLink
+
+   - 
 
 
 # To Explore
