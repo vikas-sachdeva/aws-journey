@@ -1081,7 +1081,52 @@ Notes that I am preparing while learning AWS
 
 ## AWS PrivateLink
 
-   - 
+   - VPC peering is good if there is a need to connect one VPC to another VPC.
+   - But it is not a good solution when we want to connect one VPC to 10s or 100s of VPCs.
+   - Also, after VPC peering, whole network would be assessible. All resources can be accessed by another VPC which sometimes is not a desirable solution from security point of view.
+   - AWS PrivateLink is used in such situations -
+      - It is the best way to expose a service VPC to 102, 100s or 1000s  of customer VPCs.
+      - It does not require VPC peering, no route table, NAT gateways, internet gateways etc.
+      - It requires a Network Load Balancer on the service VPC and an ENI on the customer VPC.
+
+## VPN CloudHub
+    - If you have multiple sites, each with its own VPN connection, you can use AWS VPN CloudHub to connect those sites together.
+    - It works on Hub-and-Spoke model.
+    - It is low cost and easy to manage.
+    - It operates over the public internet, but all traffic between the customer gateway and AWS VPN CloudHub is encrypted.
+
+## Direct Connect
+    - Direct connect is used to connect your premises to AWS using dedicated network connection.
+    - Using direct connect, private connectivity can be established between AWS and your data center.
+    - In many cases, you can reduce network cost, increase bandwidht throughput and provide a more consistent network experience than internet based connections.
+    - There are 2 types of direct connect 
+        - **Dedicated Connection** - A physical ethernet connection associated with a single customer. 
+        - **Hosted Connection** - A physical ethernet connection that an AWS Direct Connect Partner provisions on behalf of a customer. Customers request a hosted connection by contacting a partner in the AWS Direct Connect Partner Program who provisions the connection.
+    - Direct connect is more secure than VPN connection because VPN uses public internet whereas direct connect uses dedicated connection. Also, due to encryption in VPN, VPN connections are generally slow however direct connection is quite fast.
+    - Direct connect is fast, secure, reliable and able to take massive throughput.
+    - Direct connect is good when your application need high network throughput and better network connection.
+
+
+## Transit Gateway
+
+   - Transit Gateway connects VPCs and on-premises networks through a central hub.
+   - Transit gateway is used to simplify complex peering relationships.
+   - Its acts as a cloud router - each new connection is only made once.
+   - With transit gateway, there is no need of VPC peering for connecting VPCs.
+   - It works with VPN as well as Direct Connect Connection.
+   - It works on hub-and-spoke model i.e. it allows to have transitive peering between thousands of VPCs and on-premises data centers.
+   - It works on regional basis but you can have it across multiple regions.
+   - It also supports IP multicast (not supported by any other AWS service)
+   - You can use it across multiple AWS accounts using RAM (resource access manager).
+   - With transit gateway, complete VPC is exposed similar to VPC peering. For limiting connections between VPCs, route tables can be configured.
+
+
+## AWS Wavelength
+
+  - AWS wavelength embeds AWS compute and storage services within 5G networks, providing mobile edge computing infrastructure for developing, deploying and scaling ultra-low-latency applications.
+  - This is a physical device embeds in network tower providing compute and stroage services.
+
+
 
 
 # To Explore
