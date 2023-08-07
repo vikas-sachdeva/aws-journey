@@ -1126,7 +1126,19 @@ Notes that I am preparing while learning AWS
   - AWS wavelength embeds AWS compute and storage services within 5G networks, providing mobile edge computing infrastructure for developing, deploying and scaling ultra-low-latency applications.
   - This is a physical device embeds in network tower providing compute and stroage services.
 
+# DNS
+  - The last word in a domain name represents the top-level demain.
+  - The second word in a domain name is known as second-level domain like in `.co.uk` .co is second level domain name.
+  - Top level domain names are controlled by the Internet Assigned Numbers Authority (IANA) in a root zone database, which is a database of all available top-level domains.
+  - This database can be viewed by visiting - https://www.iana.org/domains/root/db 
+  - A registrar is an authority that can assign domain names directly under one or more top-level domains. These domains are registered with InterNIC, a service of ICANN, which enforces uniqueness of domain names across the internet.
+  - Each domain name becomes registered in a central database known as WHOIS database.
+  - Some popular domain registrars are domain.com, GoDaddy, Hoover, AWS, Namecheap.
+  
 
+# Route 53
+  - Route 53 supports both IP v4 and IP v6 addresses.
+  - 
 
 
 # To Explore
